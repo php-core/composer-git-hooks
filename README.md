@@ -212,4 +212,4 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-composer-events]: https://getcomposer.org/doc/articles/scripts.md#command-events
 [link-contributors]: ../../contributors
 [link-husky]: https://github.com/typicode/husky
-[link-packagist]: https://packagist.org/packages/brainmaestro/composer-git-hooks
+[link-packagist]: https://packagist.org/packages/php-core/composer-git-hooks
