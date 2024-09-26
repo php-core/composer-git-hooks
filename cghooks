@@ -3,7 +3,7 @@
 $dir = getcwd();
 if (is_file($autoload = __DIR__ . '/vendor/autoload.php')) {
     require_once $autoload;
-} elseif (is_file($autoload = __DIR__ . '/../../autoload.php')) {
+} else if (is_file($autoload = __DIR__ . '/../../autoload.php')) {
     require_once $autoload;
 } else {
     fwrite(STDERR,
@@ -14,12 +14,12 @@ if (is_file($autoload = __DIR__ . '/vendor/autoload.php')) {
     exit(1);
 }
 
-use BrainMaestro\GitHooks\Hook;
-use BrainMaestro\GitHooks\Commands\AddCommand;
-use BrainMaestro\GitHooks\Commands\UpdateCommand;
-use BrainMaestro\GitHooks\Commands\RemoveCommand;
-use BrainMaestro\GitHooks\Commands\ListCommand;
-use BrainMaestro\GitHooks\Commands\HookCommand;
+use PHPCore\GitHooks\Commands\AddCommand;
+use PHPCore\GitHooks\Commands\HookCommand;
+use PHPCore\GitHooks\Commands\ListCommand;
+use PHPCore\GitHooks\Commands\RemoveCommand;
+use PHPCore\GitHooks\Commands\UpdateCommand;
+use PHPCore\GitHooks\Hook;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Composer Git Hooks', '3.0.0');
@@ -29,8 +29,12 @@ $application->add(new UpdateCommand());
 $application->add(new RemoveCommand());
 $application->add(new ListCommand());
 
-foreach (Hook::getValidHooks($dir) as $hook => $script) {
-    $application->add(new HookCommand($hook, $script, $dir));
+try {
+    foreach (Hook::getValidHooks($dir) as $hook => $script) {
+        $application->add(new HookCommand($hook, $script, $dir));
+    }
+} catch (Exception $e) {
+    die(PHP_EOL . 'Exception: ' . $e->getMessage() . PHP_EOL);
 }
 
 $application->run();

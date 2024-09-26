@@ -1,22 +1,24 @@
 <?php
 
-namespace BrainMaestro\GitHooks\Commands;
+declare(strict_types=1);
 
-use BrainMaestro\GitHooks\Hook;
+namespace PHPCore\GitHooks\Commands;
+
+use PHPCore\GitHooks\Hook;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class AddCommand extends Command
 {
-    private $addedHooks = [];
-    private $upToDateHooks = [];
+    private array $addedHooks = [];
+    private array $upToDateHooks = [];
 
-    protected $force;
-    protected $noLock;
-    protected $windows;
-    protected $ignoreLock;
+    protected bool $force;
+    protected bool $noLock;
+    protected bool $windows;
+    protected bool $ignoreLock;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('add')
@@ -28,11 +30,10 @@ class AddCommand extends Command
             ->addOption('git-dir', 'g', InputOption::VALUE_REQUIRED, 'Path to git directory')
             ->addOption('lock-dir', null, InputOption::VALUE_REQUIRED, 'Path to lock file directory', getcwd())
             ->addOption('force-win', null, InputOption::VALUE_NONE, 'Force windows bash compatibility')
-            ->addOption('global', null, InputOption::VALUE_NONE, 'Add global git hooks')
-        ;
+            ->addOption('global', null, InputOption::VALUE_NONE, 'Add global git hooks');
     }
 
-    protected function init(InputInterface $input)
+    protected function init(InputInterface $input): void
     {
         $this->force = $input->getOption('force');
         $this->windows = $input->getOption('force-win') || is_windows();
@@ -40,7 +41,7 @@ class AddCommand extends Command
         $this->ignoreLock = $input->getOption('ignore-lock');
     }
 
-    protected function command()
+    protected function command(): void
     {
         if (empty($this->dir)) {
             $this->error('You did not specify a git directory to use');
@@ -53,10 +54,10 @@ class AddCommand extends Command
             $this->addHook($hook, $contents);
         }
 
-        if (! empty($this->hooks) && count($this->upToDateHooks) === count($this->hooks)) {
+        if (!empty($this->hooks) && count($this->upToDateHooks) === count($this->hooks)) {
             $this->info('All hooks are up to date');
             return;
-        } elseif (! count($this->addedHooks)) {
+        } elseif (!count($this->addedHooks)) {
             $this->error('No hooks were added. Try updating');
             return;
         }
@@ -66,7 +67,7 @@ class AddCommand extends Command
         $this->setGlobalGitHooksPath();
     }
 
-    protected function global_dir_fallback()
+    protected function global_dir_fallback(): void
     {
         if (!empty($this->dir = trim(getenv('COMPOSER_HOME')))) {
             $this->dir = realpath($this->dir);
@@ -74,12 +75,15 @@ class AddCommand extends Command
         }
     }
 
-    private static function startsWithShebang($contents)
+    private static function startsWithShebang($contents): bool
     {
         return substr_compare(trim($contents), "#!", 0) == 0;
     }
 
-    private function addHook($hook, $contents)
+    /**
+     * @throws \Exception
+     */
+    private function addHook($hook, $contents): void
     {
         $filename = "{$this->dir}/hooks/{$hook}";
         $exists = file_exists($filename);
@@ -98,7 +102,7 @@ class AddCommand extends Command
         }
         $hookContents = $shebang . $contents . PHP_EOL;
 
-        if (! $this->force && $exists) {
+        if (!$this->force && $exists) {
             $actualContents = file_get_contents($filename);
 
             if ($actualContents === $hookContents) {
@@ -120,7 +124,7 @@ class AddCommand extends Command
         $this->addedHooks[] = $hook;
     }
 
-    private function addLockFile()
+    private function addLockFile(): void
     {
         if ($this->noLock) {
             $this->debug('Skipped creating a [' . Hook::LOCK_FILE . '] file');
@@ -131,13 +135,13 @@ class AddCommand extends Command
         $this->debug("Created [{$this->lockFile}] file");
     }
 
-    private function ignoreLockFile()
+    private function ignoreLockFile(): void
     {
         if ($this->noLock) {
             return;
         }
 
-        if (! $this->ignoreLock) {
+        if (!$this->ignoreLock) {
             $this->debug('Skipped adding [' . Hook::LOCK_FILE . '] to .gitignore');
             return;
         }
@@ -151,9 +155,9 @@ class AddCommand extends Command
         }
     }
 
-    private function setGlobalGitHooksPath()
+    private function setGlobalGitHooksPath(): void
     {
-        if (! $this->global) {
+        if (!$this->global) {
             return;
         }
 
@@ -176,7 +180,7 @@ class AddCommand extends Command
 
         if ($exitCode !== 0) {
             $this->error("Could not set global git hook path.\n" .
-            " Try running this manually 'git config --global core.hooksPath {$globalHookDir}'");
+                " Try running this manually 'git config --global core.hooksPath {$globalHookDir}'");
             return;
         }
 

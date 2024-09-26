@@ -1,5 +1,5 @@
 {
-    "name": "brainmaestro/composer-git-hooks",
+    "name": "php-core/composer-git-hooks",
     "description": "Easily manage git hooks in your composer config",
     "type": "library",
     "minimum-stability": "stable",
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BrainMaestro\\GitHooks\\": "src/"
+            "PHPCore\\GitHooks\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "BrainMaestro\\GitHooks\\Tests\\": "tests/"
+            "PHPCore\\GitHooks\\Tests\\": "tests/"
         }
     },
     "bin": [
@@ -44,8 +44,8 @@
         "test": "vendor/bin/phpunit",
         "post-install-cmd": "./cghooks add --ignore-lock",
         "post-update-cmd": "./cghooks update",
-        "check-style": "php-cs-fixer fix --using-cache=no --diff --dry-run .",
-        "fix-style": "php-cs-fixer fix --using-cache=no ."
+        "check-style": "vendor/bin/php-cs-fixer fix --using-cache=no --diff --dry-run .",
+        "fix-style": "vendor/bin/php-cs-fixer fix --using-cache=no ."
     },
     "scripts-descriptions": {
         "test": "Run all tests.",

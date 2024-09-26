@@ -1,34 +1,39 @@
 <?php
 
-namespace BrainMaestro\GitHooks\Commands;
+declare(strict_types=1);
 
-use BrainMaestro\GitHooks\Hook;
+namespace PHPCore\GitHooks\Commands;
+
+use PHPCore\GitHooks\Hook;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Command extends SymfonyCommand
 {
-    private $output;
+    private OutputInterface $output;
 
-    protected $dir;
-    protected $composerDir;
-    protected $hooks;
-    protected $gitDir;
-    protected $lockDir;
-    protected $global;
-    protected $lockFile;
+    protected string $dir;
+    protected string $composerDir;
+    protected array $hooks;
+    protected string $gitDir;
+    protected ?string $lockDir;
+    protected bool $global;
+    protected string $lockFile;
 
     abstract protected function init(InputInterface $input);
 
     abstract protected function command();
 
+    /**
+     * @throws \Exception
+     */
     final protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->output = $output;
         $this->gitDir = $input->getOption('git-dir') ?: git_dir();
         $this->lockDir = $input->getOption('lock-dir');
-        $this->global = $input->getOption('global');
+        $this->global = (bool)$input->getOption('global');
         $this->dir = trim(
             $this->global && $this->gitDir === git_dir()
                 ? dirname(global_hook_dir())

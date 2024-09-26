@@ -1,8 +1,8 @@
 <?php
 
-namespace BrainMaestro\GitHooks\Tests;
+namespace PHPCore\GitHooks\Tests;
 
-use BrainMaestro\GitHooks\Hook;
+use PHPCore\GitHooks\Hook;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 abstract class TestCase extends PHPUnitTestCase

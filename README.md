@@ -1,7 +1,8 @@
 # composer-git-hooks
 
+### this is a fork of the [original package (by BrainMaestro)](https://github.com/BrainMaestro/composer-git-hooks)
+
 [![Software License][badge-license]](LICENSE)
-[![Travis][badge-travis]][link-travis]
 [![Packagist][badge-packagist]][link-packagist]
 [![Download][badge-downloads]][link-packagist]
 
@@ -35,7 +36,7 @@ Add a `hooks` section to the `extra` section of your `composer.json` and add the
 Then install with
 
 ```sh
-composer require --dev brainmaestro/composer-git-hooks
+composer require --dev php-core/composer-git-hooks
 ```
 
 This installs the `cghooks` binary to your `vendor/bin` folder. If this folder is not in your path, you will need to preface every command with `vendor/bin/`.
@@ -47,7 +48,7 @@ Note: hooks declared in the `scripts` or `hooks` root sections of `composer.json
 You can also install it globally. This feels much more natural when `cghooks` is used with the newly added support for managing global git hooks.
 
 ```sh
-composer global require --dev brainmaestro/composer-git-hooks
+composer global require --dev php-core/composer-git-hooks
 ```
 
 All commands have global support (besides testing the hooks. Still requires being in the directory with the `composer.json` file).

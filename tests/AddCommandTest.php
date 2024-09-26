@@ -1,9 +1,9 @@
 <?php
 
-namespace BrainMaestro\GitHooks\Tests;
+namespace PHPCore\GitHooks\Tests;
 
-use BrainMaestro\GitHooks\Commands\AddCommand;
-use BrainMaestro\GitHooks\Hook;
+use PHPCore\GitHooks\Commands\AddCommand;
+use PHPCore\GitHooks\Hook;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Output\OutputInterface;
